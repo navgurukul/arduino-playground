@@ -5,11 +5,11 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 const app = express();
 app.use(bodyParser.json());
-app.options("*", cors({ origin: 'http://localhost:3002', optionsSuccessStatus: 200 }));
+app.options("*", cors({ origin: 'https://arduino.merd-bhanwaridevi.merakilearn.org', optionsSuccessStatus: 200 }));
 const fs = require('fs');
 const path = require("path");
 
-app.use(cors({ origin: "http://localhost:3002", optionsSuccessStatus: 200 }));
+app.use(cors({ origin: "https://arduino.merd-bhanwaridevi.merakilearn.org", optionsSuccessStatus: 200 }));
 
 app.post('/get-code', (req, res) => {
   console.log('req = ',req.body.code)
