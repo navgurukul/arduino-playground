@@ -1,6 +1,5 @@
-# arduino-playground
+# Arduino-playground server setup instructions
 
-# Server Setup Instructions
 
 ## Overview
 
