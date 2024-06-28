@@ -15,13 +15,12 @@ app.use(cors({ origin: process.env.FE_BASE_URL, optionsSuccessStatus: 200 }));
 
 app.post("/get-code", (req, res) => {
   const code = req.body.code;
-  console.log("Received code:", code);
 
   if (!code) {
     return res.status(400).send("No code provided");
   }
 
-  const outputDir = path.join(__dirname, "output");
+  const outputDir = "output";
   const outputFilePath = path.join(outputDir, "output.ino");
 
   // Ensure the output directory exists
@@ -30,7 +29,12 @@ app.post("/get-code", (req, res) => {
   }
 
   // Write the provided code to a file
-  fs.writeFileSync(outputFilePath, code);
+  fs.writeFileSync(outputFilePath, code, (err) => {
+    if (err) {
+      console.error(`Error writing to file: ${err.message}`);
+      return res.status(500).send("Error writing to file");
+    }
+  });
 
   // Compile the Arduino code
   const command = `arduino-cli compile ${outputFilePath} -b arduino:avr:uno --output-dir ${outputDir}`;
@@ -53,10 +57,6 @@ app.post("/get-code", (req, res) => {
     // Send the compiled hex file
     res.setHeader("Content-Type", "application/octet-stream");
     const fileStream = fs.createReadStream(hexFilePath);
-    fileStream.on("error", (err) => {
-      console.error("Error reading hex file:", err);
-      res.status(500).send("Error reading hex file");
-    });
     fileStream.pipe(res);
   });
 });
